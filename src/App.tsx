@@ -208,11 +208,6 @@ export default function App() {
   const toggleEmotion = (id: string, e?: React.MouseEvent) => {
     if (isTransitioning) return;
     
-    // Haptic feedback
-    if (typeof navigator !== 'undefined' && navigator.vibrate) {
-      navigator.vibrate(10);
-    }
-    
     // Add ripple effect
     if (e) {
       const newRipple = { id: Date.now(), x: e.clientX, y: e.clientY };
@@ -518,12 +513,7 @@ export default function App() {
                             onMouseEnter={() => emotion && setHoveredEmotion(emotion)}
                             onMouseLeave={() => setHoveredEmotion(null)}
                             onClick={(e) => emotion && toggleEmotion(emotion.id, e)}
-                            whileTap={{ 
-                              y: 12, 
-                              scaleY: 0.95,
-                              filter: "brightness(0.98)",
-                              boxShadow: "0 4px 0px #ccc"
-                            }}
+                            whileTap={{ y: 8, scaleY: 0.96 }}
                             animate={isSelected ? {
                               backgroundColor: isMultiSelected ? ["#ffffff", "#f0f7ff", "#ffffff"] : "#f8fbff",
                               scale: isMultiSelected ? [1, 1.01, 1] : 1,
@@ -566,17 +556,7 @@ export default function App() {
                           {/* Black Keys - With Highlight */}
                           {(i % 7) !== 2 && (i % 7) !== 6 && i < 13 && (
                             <motion.div 
-                              whileHover={{ height: 170, filter: "brightness(1.2)" }}
-                              whileTap={{ 
-                                y: 4, 
-                                filter: "brightness(0.8)",
-                                boxShadow: "2px 4px 10px rgba(0,0,0,0.8)"
-                              }}
-                              onClick={() => {
-                                if (typeof navigator !== 'undefined' && navigator.vibrate) {
-                                  navigator.vibrate(5);
-                                }
-                              }}
+                              whileHover={{ height: 170, brightness: 1.2 }}
                               className="absolute left-[72%] top-0 w-6 md:w-8 h-32 md:h-44 bg-gradient-to-b from-[#444] via-[#111] to-black rounded-b-md z-20 shadow-[4px_8px_15px_rgba(0,0,0,0.6)] md:shadow-[8px_15px_25px_rgba(0,0,0,0.6)] border-x border-gray-800 cursor-pointer overflow-hidden"
                             >
                               <div className="absolute top-0 left-1 w-1.5 md:w-2 h-full bg-white/5" />
