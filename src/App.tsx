@@ -161,9 +161,11 @@ const PageWrapper = ({ children, className = "" }: { children: React.ReactNode, 
     animate={{ opacity: 1, x: 0 }}
     exit={{ opacity: 0, x: -20 }}
     transition={{ duration: 0.6, ease: "easeInOut" }}
-    className={`w-full h-full flex flex-col items-center justify-center p-4 md:p-12 relative overflow-y-auto ${className}`}
+    className={`w-full h-full flex flex-col items-center justify-start md:justify-center p-4 md:p-12 relative overflow-y-auto overflow-x-hidden ${className}`}
   >
-    {children}
+    <div className="w-full flex flex-col items-center py-12 md:py-0">
+      {children}
+    </div>
   </motion.div>
 );
 
@@ -177,6 +179,13 @@ export default function App() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const resetApp = () => {
     setSelectedEmotions([]);
@@ -378,7 +387,7 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
@@ -409,7 +418,7 @@ export default function App() {
             ))}
           </AnimatePresence>
 
-          <div className="max-w-6xl w-full flex flex-col items-center gap-8 md:gap-16 relative">
+          <div className="max-w-6xl w-full flex flex-col items-center gap-6 md:gap-16 relative">
             
             {/* Sheet Music Area - Enhanced with Texture and Depth */}
             <motion.div 
@@ -490,7 +499,7 @@ export default function App() {
 
             {/* Piano Body & Keys - Polished Gloss Finish */}
             <div className="w-full overflow-x-auto pb-12 hide-scrollbar">
-              <div className="inline-flex min-w-full justify-center px-4">
+              <div className="inline-flex min-w-full justify-start md:justify-center px-6 md:px-4">
                 <div className="relative bg-gradient-to-br from-[#2a2a2a] via-[#0a0a0a] to-[#000] p-4 md:p-8 rounded-[20px] md:rounded-[30px] shadow-[0_50px_100px_-30px_rgba(0,0,0,0.6)] border-t-[8px] md:border-t-[14px] border-[#3a3a3a] border-x-2 md:border-x-4 border-[#1a1a1a] before:absolute before:inset-0 before:bg-gradient-to-tr before:from-white/5 before:to-transparent before:rounded-[20px] md:before:rounded-[30px] before:pointer-events-none">
                   <div className="flex relative gap-0.5">
                     {[...Array(14)].map((_, i) => {
@@ -569,13 +578,14 @@ export default function App() {
 
   const renderNebula = () => {
     const selectedEmotionsData = EMOTIONS.filter(e => selectedEmotions.includes(e.id));
+    const isMobile = windowWidth < 768;
     
     return (
       <PageWrapper className="starry-bg text-white">
         {/* Navigation Trigger */}
         <button 
           onClick={() => setIsNavOpen(true)}
-          className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+          className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
         >
           <Menu size={24} />
         </button>
@@ -614,7 +624,7 @@ export default function App() {
             className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-br from-[#002FA7]/20 via-purple-900/10 to-transparent blur-[60px] md:blur-[100px] opacity-40"
           />
 
-          <div className="relative w-64 h-64 md:w-96 md:h-96 flex items-center justify-center">
+          <div className="relative w-full h-80 md:w-96 md:h-96 flex items-center justify-center">
             {/* Center Core */}
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -627,7 +637,7 @@ export default function App() {
             {/* Orbiting Emotion Spheres */}
             {selectedEmotionsData.map((emotion, index) => {
               const angle = (index / selectedEmotionsData.length) * Math.PI * 2;
-              const radius = window.innerWidth < 768 ? 100 : 160;
+              const radius = isMobile ? 100 : 160;
               
               return (
                 <motion.div
@@ -642,8 +652,8 @@ export default function App() {
                   }}
                   className="absolute"
                   style={{
-                    width: '80px',
-                    height: '80px',
+                    width: isMobile ? '60px' : '80px',
+                    height: isMobile ? '60px' : '80px',
                     transformOrigin: 'center center',
                   }}
                 >
@@ -684,14 +694,14 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
 
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10">
+      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center z-10 px-6">
         <div className="flex flex-col items-center text-center">
-          <div className="w-64 h-64 rounded-full border-2 border-white/20 p-2 mb-8 bg-white/5 backdrop-blur-md">
+          <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-white/20 p-2 mb-6 md:mb-8 bg-white/5 backdrop-blur-md">
             <img 
               src="https://picsum.photos/seed/water-ripple/400/400" 
               alt="Breathing" 
@@ -699,11 +709,11 @@ export default function App() {
               referrerPolicy="no-referrer"
             />
           </div>
-          <h3 className="text-base mb-4 tracking-widest">盒式呼吸法</h3>
-          <p className="text-blue-200 opacity-60 italic text-base">如流水般自然，如微风般轻盈</p>
+          <h3 className="text-sm md:text-base mb-2 md:mb-4 tracking-widest">盒式呼吸法</h3>
+          <p className="text-blue-200 opacity-60 italic text-sm md:text-base">如流水般自然，如微风般轻盈</p>
         </div>
 
-        <div className="flex flex-col items-center justify-center h-96 relative">
+        <div className="flex flex-col items-center justify-center h-64 md:h-96 relative">
           <motion.div
             animate={{ 
               scale: [1, 1.5, 1.5, 1, 1],
@@ -715,14 +725,14 @@ export default function App() {
               repeat: Infinity,
               times: [0, 0.25, 0.5, 0.75, 1]
             }}
-            className="w-48 h-48 bg-[#002FA7] opacity-20 absolute blur-2xl"
+            className="w-32 h-32 md:w-48 md:h-48 bg-[#002FA7] opacity-20 absolute blur-2xl"
           />
           <div className="z-10 text-center">
             <motion.p
               key="status"
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="text-lg tracking-widest"
+              className="text-base md:text-lg tracking-widest"
             >
               吸气...
             </motion.p>
@@ -733,7 +743,7 @@ export default function App() {
       <motion.button 
         whileHover={{ x: 10 }}
         onClick={nextPage}
-        className="fixed bottom-12 right-12 flex items-center gap-3 text-sm tracking-[0.3em] uppercase opacity-50 hover:opacity-100 transition-opacity z-10"
+        className="mt-12 md:fixed md:bottom-12 md:right-12 flex items-center gap-3 text-xs md:text-sm tracking-[0.3em] uppercase opacity-50 hover:opacity-100 transition-opacity z-10"
       >
         呼吸完毕，进入画廊 <ArrowRight size={18} />
       </motion.button>
@@ -745,15 +755,15 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
 
-      <div className="max-w-6xl w-full py-24 z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-lg mb-4 tracking-widest">艺术疗愈画廊</h2>
-          <p className="text-blue-200 opacity-60 italic text-base">在色彩与线条中，找回宁静的自我</p>
+      <div className="max-w-6xl w-full py-16 md:py-24 z-10 px-6">
+        <div className="text-center mb-12 md:mb-20">
+          <h2 className="text-base md:text-lg mb-4 tracking-widest">艺术疗愈画廊</h2>
+          <p className="text-blue-200 opacity-60 italic text-sm md:text-base">在色彩与线条中，找回宁静的自我</p>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-12">
@@ -801,98 +811,104 @@ export default function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[70] bg-[#000814] flex items-center justify-center"
+        className="fixed inset-0 z-[70] bg-[#000814] overflow-y-auto"
       >
-        {/* Navigation Trigger */}
-        <button 
-          onClick={() => setIsNavOpen(true)}
-          className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
-        >
-          <Menu size={24} />
-        </button>
+        <div className="min-h-full w-full flex items-center justify-center relative">
+          {/* Navigation Trigger */}
+          <button 
+            onClick={() => setIsNavOpen(true)}
+            className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+          >
+            <Menu size={24} />
+          </button>
 
-        <AnimatePresence mode="wait">
-          {!isFlipped ? (
-            <motion.div 
-              key="front"
-              initial={{ rotateY: -90, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: 90, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "circOut" }}
-              className="w-full h-full relative flex flex-col items-center justify-center"
-            >
-              <img 
-                src={selectedArtwork.imageUrl} 
-                alt={selectedArtwork.title} 
-                className="absolute inset-0 w-full h-full object-cover opacity-40"
-                referrerPolicy="no-referrer"
-              />
-              
-              <div className="z-10 flex flex-col items-center text-center px-6 py-20">
-                <div className="mb-10 md:mb-16 space-y-4 md:space-y-6">
-                  {selectedArtwork.subtitles.map((text, i) => (
-                    <motion.p 
-                      key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + i * 0.5 }}
-                      className="text-sm md:text-base text-white italic tracking-widest"
-                    >
-                      {text}
-                    </motion.p>
-                  ))}
-                </div>
-
-                <div className="flex gap-6 md:gap-10 items-center">
-                  <button 
-                    onClick={() => setIsPlaying(!isPlaying)}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
-                  >
-                    {isPlaying ? <Pause size={24} className="md:w-7 md:h-7" /> : <Play size={24} className="md:w-7 md:h-7" />}
-                  </button>
-                  <button className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
-                    <Heart size={24} className="md:w-7 md:h-7" />
-                  </button>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => setSelectedArtwork(null)}
-                className="absolute top-8 right-8 text-white flex items-center gap-3 opacity-50 hover:opacity-100 transition-opacity z-[80] uppercase tracking-[0.2em] text-sm"
+          <AnimatePresence mode="wait">
+            {!isFlipped ? (
+              <motion.div 
+                key="front"
+                initial={{ rotateY: -90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: 90, opacity: 0 }}
+                transition={{ duration: 0.8, ease: "circOut" }}
+                className="w-full min-h-screen relative flex flex-col items-center justify-center py-20"
               >
-                <ChevronLeft size={20} /> 返回画廊
-              </button>
+                <img 
+                  src={selectedArtwork.imageUrl} 
+                  alt={selectedArtwork.title} 
+                  className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none"
+                  referrerPolicy="no-referrer"
+                />
+                
+                <div className="z-10 flex flex-col items-center text-center px-6">
+                  <div className="mb-10 md:mb-16 space-y-4 md:space-y-6">
+                    {selectedArtwork.subtitles.map((text, i) => (
+                      <motion.p 
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 + i * 0.5 }}
+                        className="text-sm md:text-base text-white italic tracking-widest"
+                      >
+                        {text}
+                      </motion.p>
+                    ))}
+                  </div>
 
-              <div className="absolute bottom-12 text-white text-sm opacity-30 tracking-[0.4em] uppercase animate-pulse">
-                长按作品查看简介 / LONG PRESS FOR INFO
-              </div>
-              
-              <div 
-                className="absolute inset-0 cursor-help z-10"
-                onMouseDown={() => {
-                  const timer = setTimeout(() => setIsFlipped(true), 800);
-                  window.addEventListener('mouseup', () => clearTimeout(timer), { once: true });
-                }}
-              />
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="back"
-              initial={{ rotateY: 90, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: -90, opacity: 0 }}
-              transition={{ duration: 0.8, ease: "circOut" }}
-              onClick={() => setIsFlipped(false)}
-              className="w-full h-full bg-[#002FA7]/90 backdrop-blur-3xl text-white flex flex-col items-center justify-center p-12 text-center cursor-pointer"
-            >
-              <h3 className="text-lg mb-10 tracking-widest">{selectedArtwork.title}</h3>
-              <p className="text-base leading-relaxed max-w-3xl opacity-80 italic">
-                {selectedArtwork.description}
-              </p>
-              <div className="mt-16 text-sm tracking-[0.5em] opacity-40 uppercase">点击返回作品 / CLICK TO RETURN</div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  <div className="flex gap-6 md:gap-10 items-center">
+                    <button 
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all"
+                    >
+                      {isPlaying ? <Pause size={24} className="md:w-7 md:h-7" /> : <Play size={24} className="md:w-7 md:h-7" />}
+                    </button>
+                    <button className="w-16 h-16 md:w-20 md:h-20 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all">
+                      <Heart size={24} className="md:w-7 md:h-7" />
+                    </button>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setSelectedArtwork(null)}
+                  className="absolute top-4 right-4 md:top-8 md:right-8 text-white flex items-center gap-3 opacity-50 hover:opacity-100 transition-opacity z-[80] uppercase tracking-[0.2em] text-xs md:text-sm"
+                >
+                  <ChevronLeft size={20} /> 返回画廊
+                </button>
+
+                <div className="absolute bottom-12 text-white text-sm opacity-30 tracking-[0.4em] uppercase animate-pulse">
+                  长按作品查看简介 / LONG PRESS FOR INFO
+                </div>
+                
+                <div 
+                  className="absolute inset-0 cursor-help z-10"
+                  onMouseDown={() => {
+                    const timer = setTimeout(() => setIsFlipped(true), 800);
+                    window.addEventListener('mouseup', () => clearTimeout(timer), { once: true });
+                  }}
+                  onTouchStart={() => {
+                    const timer = setTimeout(() => setIsFlipped(true), 800);
+                    window.addEventListener('touchend', () => clearTimeout(timer), { once: true });
+                  }}
+                />
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="back"
+                initial={{ rotateY: 90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: -90, opacity: 0 }}
+                transition={{ duration: 0.8, ease: "circOut" }}
+                onClick={() => setIsFlipped(false)}
+                className="w-full min-h-screen bg-[#002FA7]/90 backdrop-blur-3xl text-white flex flex-col items-center justify-center p-8 md:p-12 text-center cursor-pointer"
+              >
+                <h3 className="text-lg mb-10 tracking-widest">{selectedArtwork.title}</h3>
+                <p className="text-sm md:text-base leading-relaxed max-w-3xl opacity-80 italic">
+                  {selectedArtwork.description}
+                </p>
+                <div className="mt-16 text-sm tracking-[0.5em] opacity-40 uppercase">点击返回作品 / CLICK TO RETURN</div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.div>
     );
   };
@@ -902,7 +918,7 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
@@ -949,7 +965,7 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
@@ -975,12 +991,12 @@ export default function App() {
           ))}
         </div>
       </div>
-      <button 
+      <motion.button 
         onClick={nextPage}
-        className="fixed bottom-8 right-8 md:bottom-12 md:right-12 flex items-center gap-3 text-xs md:text-sm tracking-[0.4em] uppercase opacity-50 hover:opacity-100 transition-opacity z-10"
+        className="mt-12 md:fixed md:bottom-12 md:right-12 flex items-center gap-3 text-xs md:text-sm tracking-[0.4em] uppercase opacity-50 hover:opacity-100 transition-opacity z-10"
       >
         进入我的页面 <ChevronLeft size={16} className="rotate-180" />
-      </button>
+      </motion.button>
     </PageWrapper>
   );
 
@@ -989,7 +1005,7 @@ export default function App() {
       {/* Navigation Trigger */}
       <button 
         onClick={() => setIsNavOpen(true)}
-        className="fixed top-8 left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
+        className="fixed top-4 left-4 md:top-8 md:left-8 z-50 p-3 bg-white/10 backdrop-blur-md rounded-full text-white hover:bg-white/20 transition-all border border-white/10"
       >
         <Menu size={24} />
       </button>
@@ -1054,7 +1070,7 @@ export default function App() {
   );
 
   return (
-    <div className="w-full h-screen bg-white font-sans selection:bg-[#002FA7] selection:text-white overflow-hidden relative">
+    <div className="w-full h-[100dvh] bg-white font-sans selection:bg-[#002FA7] selection:text-white overflow-hidden relative">
       {renderNavigation()}
       {renderScrollbar()}
       
