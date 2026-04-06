@@ -329,7 +329,7 @@ export default function App() {
           animate={{ x: 0 }}
           exit={{ x: '-100%' }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed inset-y-0 left-0 w-full sm:w-80 bg-[#002FA7]/90 backdrop-blur-xl text-white z-[60] shadow-2xl p-8 sm:p-12 flex flex-col border-r border-white/10"
+          className="fixed inset-y-0 left-0 w-full sm:w-80 bg-[#002FA7]/40 backdrop-blur-2xl text-white z-[60] shadow-2xl p-8 sm:p-12 flex flex-col border-r border-white/10"
         >
           <div className="flex justify-between items-center mb-16">
             <h3 className="text-base text-white/90 tracking-widest">目录 / INDEX</h3>
