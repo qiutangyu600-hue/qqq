@@ -163,7 +163,7 @@ const PageWrapper = ({ children, className = "" }: { children: React.ReactNode, 
     transition={{ duration: 0.6, ease: "easeInOut" }}
     className={`w-full h-full flex flex-col items-center justify-start md:justify-center p-4 md:p-12 relative overflow-y-auto overflow-x-hidden ${className}`}
   >
-    <div className="w-full flex flex-col items-center py-12 md:py-0">
+    <div className="w-full flex flex-col items-center py-10 md:py-0">
       {children}
     </div>
   </motion.div>
@@ -422,7 +422,7 @@ export default function App() {
             
             {/* Sheet Music Area - Enhanced with Texture and Depth */}
             <motion.div 
-              className="w-full h-64 md:h-80 border-b-8 border-white/10 rounded-t-[30px] md:rounded-t-[40px] p-6 md:p-10 relative flex flex-col items-center justify-center bg-white/90 backdrop-blur-md shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] overflow-hidden"
+              className="w-full h-56 md:h-80 border-b-8 border-white/10 rounded-t-[30px] md:rounded-t-[40px] p-6 md:p-10 relative flex flex-col items-center justify-center bg-white/90 backdrop-blur-md shadow-[0_40px_100px_-20px_rgba(0,0,0,0.3)] overflow-hidden"
               style={{ 
                 backgroundImage: 'linear-gradient(rgba(0,47,167,0.05) 1px, transparent 1px), radial-gradient(rgba(0,47,167,0.02) 15%, transparent 16%)', 
                 backgroundSize: '100% 28px, 4px 4px' 
@@ -624,7 +624,7 @@ export default function App() {
             className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-br from-[#002FA7]/20 via-purple-900/10 to-transparent blur-[60px] md:blur-[100px] opacity-40"
           />
 
-          <div className="relative w-full h-80 md:w-96 md:h-96 flex items-center justify-center">
+          <div className="relative w-full h-96 md:w-96 md:h-96 flex items-center justify-center">
             {/* Center Core */}
             <motion.div
               animate={{ scale: [1, 1.1, 1] }}
@@ -699,7 +699,7 @@ export default function App() {
         <Menu size={24} />
       </button>
 
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center z-10 px-6">
+      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-12 items-center z-10 px-6">
         <div className="flex flex-col items-center text-center">
           <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-2 border-white/20 p-2 mb-6 md:mb-8 bg-white/5 backdrop-blur-md">
             <img 
@@ -923,7 +923,7 @@ export default function App() {
         <Menu size={24} />
       </button>
 
-      <div className="max-w-2xl w-full bg-white/5 backdrop-blur-2xl p-8 md:p-16 rounded-[30px] md:rounded-[40px] shadow-2xl border border-white/10 z-10">
+      <div className="max-w-2xl w-full bg-white/5 backdrop-blur-2xl p-6 md:p-16 rounded-[30px] md:rounded-[40px] shadow-2xl border border-white/10 z-10 mx-6">
         <h2 className="text-base md:text-lg mb-8 md:mb-12 border-b border-white/10 pb-6 tracking-widest">疗愈反馈报告</h2>
         <div className="space-y-6 md:space-y-8">
           <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
